@@ -34,7 +34,7 @@ $("#add-train-btn").on("click", function(event) {
 // Grabs user input
 var trainName = $("#train-name-input").val();
 var trainDestination = $("#destination-input").val();
-var firstArrival = moment($("#start-input").val(), "HH:mm").format();
+var firstArrival = moment($("#start-input").val(), "HHmm").format();
 var trainFrequency = $("#frequency-input").val();
 
 // Local object for holding employee data
@@ -62,4 +62,27 @@ $("#frequency-input").val("");
 
 });
 
-//
+//Create Firebase event for adding trains to the database and a row in the html when a user adds an entry
+database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+
+  console.log(childSnapshot.val());
+
+  // Store everything into a variable.
+  var trainName = childSnapshot.val().name;
+  var trainDestination = childSnapshot.val().destination;
+  var firstArrival = childSnapshot.val().arrival;
+  var trainFrequency = childSnapshot.val().frequency;
+
+  console.log(trainName);
+  console.log(trainDestination);
+  console.log(firstArrival);
+  console.log(trainFrequency);
+
+  var newArrival = moment()
+    .seconds(moment().diff(moment(trainFrequency).startOf("minute"), 'seconds'))
+    .format('[00]:ss [minutes ago]');
+    console.log(newArrival);
+
+    $("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + trainFrequency + "</td><td>" + newArrival + "</td><td>");
+
+});
