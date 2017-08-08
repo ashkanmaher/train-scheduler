@@ -24,3 +24,42 @@ Styling and theme are completely up to you. Get Creative!
     messagingSenderId: "462190767429"
   };
   firebase.initializeApp(config);
+
+var database = firebase.database();
+
+//Button for adding trains
+$("#add-train-btn").on("click", function(event) {
+  event.preventDefault();
+
+// Grabs user input
+var trainName = $("#train-name-input").val();
+var trainDestination = $("#destination-input").val();
+var firstArrival = moment($("#start-input").val(), "HH:mm").format();
+var trainFrequency = $("#frequency-input").val();
+
+// Local object for holding employee data
+var newTrain = {
+  name: trainName,
+  destination: trainDestination,
+  arrival: firstArrival,
+  frequency: trainFrequency,
+};
+
+// upload train data to the database
+database.ref().push(newTrain);
+
+//Log everything to the console
+ console.log(newTrain.name);
+ console.log(newTrain.destination);
+ console.log(newTrain.arrival);
+ console.log(newTrain.frequency);
+
+//Clear the text box after submit
+$("#train-name-input").val("");
+$("#destination-input").val("");
+$("#start-input").val("");
+$("#frequency-input").val("");
+
+});
+
+//
